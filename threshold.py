@@ -61,7 +61,8 @@ neural_network = NeuralNetwork(layers=[X_train.shape[1], 5, 1], learning_rate=0.
 neural_network.train(X_train, Y_train)
 
 # Testing different decision thresholds
-thresholds = [0.3, 0.5, 0.7, 2]
+# thresholds = [0.3, 0.5, 0.7, 2]
+thresholds = [0.5]
 for threshold in thresholds:
     predictions = neural_network.predict(X_test, threshold=threshold)
     accuracy = np.mean(predictions == Y_test)
