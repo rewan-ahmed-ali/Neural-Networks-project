@@ -58,6 +58,27 @@ print(classification_report(Y_test, y_pred))
 print("Confusion Matrix:")
 print(confusion_matrix(Y_test, y_pred))
 
+# Define a function to preprocess input data
+def preprocess_input_data(data):
+    # Convert data to numpy array
+    data_array = np.array(data)
+    # Reshape data array to match model input shape
+    data_array = data_array.reshape(1, -1)
+    # Normalize input features
+    data_array = scaler.transform(data_array)
+    return data_array
+# Test data for a single person
+test_data = [54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]
+# Preprocess the test data
+processed_test_data = preprocess_input_data(test_data)
+# Predict whether the person has heart disease or not
+prediction = model.predict(processed_test_data)
+# Print the prediction
+if prediction[0] == 1 :
+    print("The person is predicted to have heart disease.")
+else:
+    print("The person is predicted not to have heart disease.")
+
 # Plot the training loss and accuracy
 import matplotlib.pyplot as plt
 
