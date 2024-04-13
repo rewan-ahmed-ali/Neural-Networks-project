@@ -69,5 +69,9 @@ plt.title('Model Accuracy and Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy / Loss')
 plt.legend()
+# # Add text to the plot
+# plt.text(80, 100, 'Team:\n\n1-Rewan Ahmed Ali\n2-sara abdelkader\n3-maryam jamal\n4-aya sabry\n5-alaa atef\n6-asmaa mohamed',
+#          fontsize=12, color='#000E8C', style='oblique', bbox=dict(facecolor='#6A698C', alpha=0.5))
+
 plt.show()
 
