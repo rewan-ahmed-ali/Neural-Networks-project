@@ -60,10 +60,14 @@ print(confusion_matrix(Y_test, y_pred))
 
 # Plot the training loss and accuracy
 import matplotlib.pyplot as plt
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
-plt.title('Model Accuracy')
-plt.ylabel('Accuracy')
+
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Model Accuracy and Loss')
 plt.xlabel('Epoch')
-plt.legend(['Train', 'Validation'], loc='upper left')
+plt.ylabel('Accuracy / Loss')
+plt.legend()
 plt.show()
+
