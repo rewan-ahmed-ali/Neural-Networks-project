@@ -63,7 +63,7 @@ test_accuracy = np.mean(y_test_pred == y_test)
 print("Accuracy on test data:", test_accuracy)
 
 # Building a predictive system
-input_data = np.array([[43, 0, 0, 132, 341, 1, 0, 136, 1, 3, 1, 0, 3]])
+input_data = np.array([[54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]])
 
 # Predict using the trained Perceptron
 prediction = perceptron.predict(input_data)
