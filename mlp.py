@@ -19,11 +19,13 @@ Y = Heart_Data['target'].values.astype('float32')  # Ensure labels are float
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 
-# Define the network architecture using Keras
+# Define the network architecture using Keras 
+#Sequential = feed forward network
 model = Sequential([
     Dense(256, activation='relu', input_shape=(X.shape[1],)),
     Dense(128, activation='relu'),
     Dense(1, activation='sigmoid')  # Output layer with 1 neuron for binary classification
+    # Dense(1, activation='linear') # Output layer with linear activation for binary classification
 ])
 
 # Print the model summary
@@ -40,6 +42,11 @@ history = model.fit(X_train, Y_train, epochs=50, batch_size=32, validation_split
 test_loss, test_accuracy = model.evaluate(X_test, Y_test)
 print("Test loss:", test_loss)
 print("Test accuracy:", test_accuracy)
+# # Evaluate the network
+# Y_pred = model.predict(X_test)
+# y_pred = (Y_pred > 0.5).astype(np.float32)  # Convert probabilities to binary predictions
+# print("Classification Report:")
+# print(classification_report(Y_test, y_pred))
 
 # Evaluate the network
 Y_pred = model.predict(X_test)
