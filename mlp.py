@@ -1,3 +1,5 @@
+# multilayer perceptron (MLP) using a Sequential model 
+# Artificial Neural Network (ANN) using TensorFlow and Keras for binary classification on the heart disease dataset
 # importing modules
 import numpy as np
 import pandas as pd
@@ -22,8 +24,8 @@ X = scaler.fit_transform(X)
 # Define the network architecture using Keras 
 #Sequential = feed forward network
 model = Sequential([
-    Dense(256, activation='relu', input_shape=(X.shape[1],)),
-    Dense(128, activation='relu'),
+    Dense(256, activation='relu', input_shape=(X.shape[1],)), #first hidden layer
+    Dense(128, activation='relu'),  #second hidden layer
     Dense(1, activation='sigmoid')  # Output layer with 1 neuron for binary classification
     # Dense(1, activation='linear') # Output layer with linear activation for binary classification
 ])
@@ -81,7 +83,6 @@ else:
 
 # Plot the training loss and accuracy
 import matplotlib.pyplot as plt
-
 plt.plot(history.history['accuracy'], label='Training Accuracy')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
 plt.plot(history.history['loss'], label='Training Loss')
@@ -93,6 +94,34 @@ plt.legend()
 # # Add text to the plot
 # plt.text(80, 100, 'Team:\n\n1-Rewan Ahmed Ali\n2-sara abdelkader\n3-maryam jamal\n4-aya sabry\n5-alaa atef\n6-asmaa mohamed',
 #          fontsize=12, color='#000E8C', style='oblique', bbox=dict(facecolor='#6A698C', alpha=0.5))
-
 plt.show()
 
+
+#Data Loading and Preprocessing
+#    - The heart disease dataset (`heart.csv`) is loaded using pandas.
+#    - Features are normalized using `StandardScaler`.
+#    - The input features (`X`) and labels (`Y`) are prepared.
+
+# Model Definition
+#    - A Sequential model is created with three Dense layers.
+#    - The input layer has 256 neurons with ReLU activation.
+#    - The second hidden layer has 128 neurons with ReLU activation.
+#    - The output layer has 1 neuron with Sigmoid activation for binary classification.
+
+# Model Compilation and Training
+#    - The model is compiled with the Adam optimizer and binary cross-entropy loss function.
+#    - It is trained on the training data (`X_train`, `Y_train`) for 50 epochs with a batch size of 32.
+#    - Validation data is specified using the `validation_split` parameter.
+
+# Model Evaluation
+#    - The model is evaluated on the test data (`X_test`, `Y_test`), and test loss and accuracy are printed.
+#    - Classification report and confusion matrix are generated to evaluate model performance.
+
+# Prediction
+#    - A function `preprocess_input_data` is defined to preprocess input data for prediction.
+#    - Test data for a single person is provided.
+#    - The test data is preprocessed and passed through the model to predict whether the person has heart disease or not.
+#    - The prediction is printed.
+
+# Visualization
+#    - Training and validation accuracy and loss are plotted over epochs using Matplotlib.
