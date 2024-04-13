@@ -40,8 +40,7 @@ history = model.fit(X_train, Y_train, epochs=50, batch_size=32, validation_split
 
 # Evaluate the model
 test_loss, test_accuracy = model.evaluate(X_test, Y_test)
-print("Test loss:", test_loss)
-print("Test accuracy:", test_accuracy)
+print("Test loss:", test_loss, "| Test accuracy:", test_accuracy)
 # # Evaluate the network
 # Y_pred = model.predict(X_test)
 # y_pred = (Y_pred > 0.5).astype(np.float32)  # Convert probabilities to binary predictions
@@ -49,6 +48,7 @@ print("Test accuracy:", test_accuracy)
 # print(classification_report(Y_test, y_pred))
 
 # Evaluate the network
+print("[INFO] Evaluating network...")
 Y_pred = model.predict(X_test)
 y_pred = np.round(Y_pred).flatten()  # Round predictions to 0 or 1
 print("Classification Report:")
