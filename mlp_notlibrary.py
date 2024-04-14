@@ -51,7 +51,6 @@ history = model.fit(X_train, Y_train, epochs=50, batch_size=32, validation_split
 # Evaluate the model
 test_loss, test_accuracy = model.evaluate(X_test, Y_test)
 print("Test loss:", test_loss, "| Test accuracy:", test_accuracy)
-
 # Model Evaluation
 print("[INFO] Evaluating network...")
 Y_pred = model.predict(X_test)
@@ -64,23 +63,49 @@ def calculate_classification_report(y_true, y_pred):
     FP = np.sum(np.logical_and(y_true == 0, y_pred == 1))
     FN = np.sum(np.logical_and(y_true == 1, y_pred == 0))
     
-    precision = TP / (TP + FP)
-    recall = TP / (TP + FN)
-    f1_score = 2 * precision * recall / (precision + recall)
+    precision_0 = TN / (TN + FP)
+    recall_0 = TN / (TN + FN)
+    f1_score_0 = 2 * precision_0 * recall_0 / (precision_0 + recall_0)
     
+    precision_1 = TP / (TP + FP)
+    recall_1 = TP / (TP + FN)
+    f1_score_1 = 2 * precision_1 * recall_1 / (precision_1 + recall_1)
+
+    accuracy = (TP + TN) / (TP + TN + FP + FN)
+
     return {
-        'precision': precision,
-        'recall': recall,
-        'f1-score': f1_score,
-        'support': len(y_true)
+        '0.0': {'precision': precision_0, 'recall': recall_0, 'f1-score': f1_score_0, 'support': len(y_true) - np.sum(y_true)},
+        '1.0': {'precision': precision_1, 'recall': recall_1, 'f1-score': f1_score_1, 'support': np.sum(y_true)},
+        'accuracy': accuracy,
+        'macro avg': {'precision': (precision_0 + precision_1) / 2, 'recall': (recall_0 + recall_1) / 2, 'f1-score': (f1_score_0 + f1_score_1) / 2, 'support': len(y_true)},
+        'weighted avg': {'precision': (precision_0 * (len(y_true) - np.sum(y_true)) + precision_1 * np.sum(y_true)) / len(y_true), 
+                         'recall': (recall_0 * (len(y_true) - np.sum(y_true)) + recall_1 * np.sum(y_true)) / len(y_true), 
+                         'f1-score': (f1_score_0 * (len(y_true) - np.sum(y_true)) + f1_score_1 * np.sum(y_true)) / len(y_true), 
+                         'support': len(y_true)}
     }
 
 classification_result = calculate_classification_report(Y_test, y_pred)
+
+# Printing classification report in the desired format
 print("Classification Report:")
-print("precision:", classification_result['precision'])
-print("recall:", classification_result['recall'])
-print("f1-score:", classification_result['f1-score'])
-print("support:", classification_result['support'])
+print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("", "precision", "recall", "f1-score", "support"))
+print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("0.0", f"{classification_result['0.0']['precision']:.2f}", 
+                                                  f"{classification_result['0.0']['recall']:.2f}", 
+                                                  f"{classification_result['0.0']['f1-score']:.2f}", 
+                                                  classification_result['0.0']['support']))
+print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("1.0", f"{classification_result['1.0']['precision']:.2f}", 
+                                                  f"{classification_result['1.0']['recall']:.2f}", 
+                                                  f"{classification_result['1.0']['f1-score']:.2f}", 
+                                                  classification_result['1.0']['support']))
+print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("accuracy", "", "", f"{classification_result['accuracy']:.2f}", ""))
+print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("macro avg", f"{classification_result['macro avg']['precision']:.2f}", 
+                                                  f"{classification_result['macro avg']['recall']:.2f}", 
+                                                  f"{classification_result['macro avg']['f1-score']:.2f}", 
+                                                  classification_result['macro avg']['support']))
+print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("weighted avg", f"{classification_result['weighted avg']['precision']:.2f}", 
+                                                  f"{classification_result['weighted avg']['recall']:.2f}", 
+                                                  f"{classification_result['weighted avg']['f1-score']:.2f}", 
+                                                  classification_result['weighted avg']['support']))
 
 # Create a Confusion Matrix
 def confusion_matrix_custom(y_true, y_pred):
