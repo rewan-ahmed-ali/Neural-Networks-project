@@ -8,7 +8,7 @@ def sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
 def relu(self, z):
         return np.maximum(0, z)
-# Load and preprocess data
+
 Heart_Data = pd.read_csv("heart.csv")
 X = Heart_Data.drop(columns='target', axis=1).values.astype('float32')
 Y = Heart_Data['target'].values.astype('float32')  # Ensure labels are float
@@ -16,23 +16,21 @@ mean = np.mean(X, axis=0)
 std = np.std(X, axis=0)
 X = (X - mean) / std
 
-# Define the network architecture using Keras 
 model = Sequential([
-    Dense(256, activation='relu', input_shape=(X.shape[1],)), #first hidden layer
-    Dense(128, activation='relu'),  #second hidden layer
-    Dense(1, activation='sigmoid')  # Output layer with 1 neuron for binary classification
+    Dense(256, activation='relu', input_shape=(X.shape[1],)), 
+    Dense(128, activation='relu'),  
+    Dense(1, activation='sigmoid')  
 ])
 
-# Define the loss function
 loss_fn = tf.keras.losses.BinaryCrossentropy()
 
-# Define the optimizer
+# optimizer
 optimizer = tf.keras.optimizers.Adam()
 
-# Compile the model
+# Compile model
 model.compile(optimizer=optimizer, loss=loss_fn, metrics=['accuracy'])
 
-# Train the model
+# Train  model
 history = model.fit(X, Y, epochs=50, batch_size=32, validation_split=0.2)
 
 # Evaluate the model
@@ -44,23 +42,18 @@ print("[INFO] Evaluating network...")
 Y_pred = model.predict(X)
 y_pred = np.round(Y_pred).flatten()
 
-# Calculate classification report
 def calculate_classification_report(y_true, y_pred):
     TP = np.sum(np.logical_and(y_true == 1, y_pred == 1))
     TN = np.sum(np.logical_and(y_true == 0, y_pred == 0))
     FP = np.sum(np.logical_and(y_true == 0, y_pred == 1))
-    FN = np.sum(np.logical_and(y_true == 1, y_pred == 0))
-    
+    FN = np.sum(np.logical_and(y_true == 1, y_pred == 0))    
     precision_0 = TN / (TN + FP)
     recall_0 = TN / (TN + FN)
-    f1_score_0 = 2 * precision_0 * recall_0 / (precision_0 + recall_0)
-    
+    f1_score_0 = 2 * precision_0 * recall_0 / (precision_0 + recall_0)    
     precision_1 = TP / (TP + FP)
     recall_1 = TP / (TP + FN)
     f1_score_1 = 2 * precision_1 * recall_1 / (precision_1 + recall_1)
-
     accuracy = (TP + TN) / (TP + TN + FP + FN)
-
     return {
         '0.0': {'precision': precision_0, 'recall': recall_0, 'f1-score': f1_score_0, 'support': len(y_true) - np.sum(y_true)},
         '1.0': {'precision': precision_1, 'recall': recall_1, 'f1-score': f1_score_1, 'support': np.sum(y_true)},
@@ -103,14 +96,12 @@ def confusion_matrix_custom(y_true, y_pred):
 print("Confusion Matrix:")
 print(confusion_matrix_custom(Y, y_pred))
 
-# Preprocess input data
 def preprocess_input_data(data, mean, std):
     data_array = np.array(data)
     data_array = data_array.reshape(1, -1)
     data_array = (data_array - mean) / std
     return data_array
 
-# Predict new data
 test_data = [54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]
 processed_test_data = preprocess_input_data(test_data, mean, std)
 prediction = model.predict(processed_test_data)
@@ -119,7 +110,6 @@ if prediction[0] == 1:
 else:
     print("The person is predicted not to have heart disease.")
 
-# Plot training history
 import matplotlib.pyplot as plt
 plt.plot(history.history['accuracy'], label='Training Accuracy')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
