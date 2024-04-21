@@ -60,6 +60,10 @@ print("Accuracy on test data:", test_accuracy)
 # Building a predictive system
 input_data = np.array([[52, 1, 0, 125, 212, 0, 1, 168, 0, 1, 2, 2, 3]])
 
+# Get the actual target for this input data
+actual_target = 0  # Assuming it's not a heart disease case
+print("Actual target for this input data:", actual_target)
+
 # Predict using the trained model
 prediction = hebbian_learning.predict(input_data)
 
@@ -68,3 +72,9 @@ if prediction[0] == 1:
     print("The person is predicted to have heart disease.")
 else:
     print("The person is predicted not to have heart disease.")
+
+# Check if prediction matches actual target
+if prediction[0] == actual_target:
+    print("The prediction matches the actual target.")
+else:
+    print("The prediction does not match the actual target. The accuracy is low.")
