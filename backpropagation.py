@@ -4,6 +4,10 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
+def sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
+def relu(self, z):
+        return np.maximum(0, z)
 # Load and preprocess data
 Heart_Data = pd.read_csv("heart.csv")
 X = Heart_Data.drop(columns='target', axis=1).values.astype('float32')
