@@ -35,7 +35,7 @@ history = model.fit(X, Y, epochs=50, batch_size=32, validation_split=0.2)
 
 # Evaluate the model
 test_loss, test_accuracy = model.evaluate(X, Y)
-print("Test loss:", test_loss, "| Test accuracy:", test_accuracy)
+print("\n\tTest loss:", test_loss, "| Test accuracy:", test_accuracy)
 
 # Model Evaluation
 print("[INFO] Evaluating network...")
@@ -66,7 +66,7 @@ def calculate_classification_report(y_true, y_pred):
     }
 
 classification_result = calculate_classification_report(Y, y_pred)
-print("Classification Report:")
+print("\nClassification Report:")
 print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("", "precision", "recall", "f1-score", "support"))
 print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("0.0", f"{classification_result['0.0']['precision']:.2f}", 
                                                   f"{classification_result['0.0']['recall']:.2f}", 
