@@ -74,11 +74,12 @@ history = model.fit(X_train, Y_train, epochs=50, batch_size=32, validation_split
 
 # Evaluate the model
 test_loss, test_accuracy = model.evaluate(X_test, Y_test)
-print("Test loss:", test_loss, "| Test accuracy:", test_accuracy)
+
 # Model Evaluation
 print("[INFO] Evaluating network...")
 Y_pred = model.predict(X_test)
 y_pred = np.round(Y_pred).flatten()  # Round predictions to 0 or 1
+print("\n\tTest loss:", test_loss, "| Test accuracy:", test_accuracy)
 
 def calculate_classification_report(y_true, y_pred):
     TP = np.sum(np.logical_and(y_true == 1, y_pred == 1))
@@ -104,7 +105,7 @@ def calculate_classification_report(y_true, y_pred):
     }
 
 classification_result = calculate_classification_report(Y_test, y_pred)
-print("Classification Report:")
+print("\nClassification Report:")
 print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("", "precision", "recall", "f1-score", "support"))
 print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("0.0", f"{classification_result['0.0']['precision']:.2f}", 
                                                   f"{classification_result['0.0']['recall']:.2f}", 
