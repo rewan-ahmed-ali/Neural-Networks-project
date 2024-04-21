@@ -1,36 +1,38 @@
 import pandas as pd
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 
-
+# Read the data
 data = pd.read_csv("heart.csv")
 
-# تقسيم البيانات إلى مدخلات (features) (target)
+# Define features (X) and target (y)
 X = data.drop("target", axis=1)
 y = data["target"]
 
-# تقسيم البيانات إلى مجموعات التدريب والاختبار
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Splitting data into training and testing sets manually
+train_size = int(0.8 * len(data))
+X_train, X_test = X[:train_size], X[train_size:]
+y_train, y_test = y[:train_size], y[train_size:]
 
-# تسوية البيانات
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+# Standardizing the data manually
+mean = X_train.mean(axis=0)
+std = X_train.std(axis=0)
+X_train_scaled = (X_train - mean) / std
+X_test_scaled = (X_test - mean) / std
 
-# بناء نموذج الشبكة العصبية العميقة
+# Define the deep neural network model
 model = tf.keras.Sequential([
     tf.keras.layers.Dense(128, activation='relu', input_shape=(X_train_scaled.shape[1],)),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 model.summary()
-# تحديد الدالة الخسارة ومعدل التعلم
+
+# Compile the model
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-# تدريب النموذج
+# Train the model
 model.fit(X_train_scaled, y_train, epochs=50, batch_size=32, validation_data=(X_test_scaled, y_test))
 
-# تقييم النموذج
+# Evaluate the model
 test_loss, test_accuracy = model.evaluate(X_test_scaled, y_test)
 print(f"Test Accuracy: {test_accuracy}")
