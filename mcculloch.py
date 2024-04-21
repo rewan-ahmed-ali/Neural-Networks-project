@@ -1,47 +1,59 @@
-import numpy as np
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
-class McCullochPittsNN:
-    def __init__(self, input_size, inhibitory_constant):
-        self.input_size = input_size
-        self.inhibitory_constant = inhibitory_constant
-        self.weights = np.random.randn(input_size)
-        self.bias = np.random.randn()
+class McCullochPittsNeuron:
+    def __init__(self, weights, threshold):
+        self.weights = weights
+        self.threshold = threshold
 
-    def activate(self, x):
-        #n⋅w−p
-        weighted_sum = np.dot(x, self.weights) - self.inhibitory_constant
-        theta = 0  
-        return 1 if weighted_sum >= theta else 0
+    def activate(self, inputs):
+        weighted_sum = np.dot(inputs, self.weights)  # Compute weighted sum for all inputs
+        activations = np.where(weighted_sum >= self.threshold, 1, 0)  # Apply threshold
+        return activations
 
-    def forward(self, X):
-        outputs = []
-        for x in X:
-            outputs.append(self.activate(x))
-        return np.array(outputs)
-inhibitory_constant = np.random.rand() 
+def plot_decision_boundary(neuron, X, y):
+    x_min, x_max = X[:, 0].min() - 0.1, X[:, 0].max() + 0.1
+    y_min, y_max = X[:, 1].min() - 0.1, X[:, 1].max() + 0.1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                         np.arange(y_min, y_max, 0.01))
+    Z = neuron.activate(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
 
-Heart_Data = pd.read_csv("heart.csv")
-X = Heart_Data.drop(columns='target', axis=1).values.astype('float32')
-Y = Heart_Data['target'].values.astype('float32')
+    plt.contourf(xx, yy, Z, alpha=0.3)
+    plt.xlabel('Age')
+    plt.ylabel('Resting Blood Pressure')
+    plt.title('Decision Boundary')
+    plt.grid(True)
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral, edgecolors='k')
+    plt.show()
 
-# train the model
-model = McCullochPittsNN(input_size=X.shape[1], inhibitory_constant=inhibitory_constant)
+# Read the dataset
+data = pd.read_csv('heart.csv')
 
-# Make predictions
-predictions = model.forward(X)
+# Extract features and target
+X = data[['age', 'trestbps']].values
+y = data['target'].values
 
-# Model Evaluation
-accuracy = np.mean(Y == predictions)
-print("Accuracy:", accuracy)
+# Define weights and threshold for the neuron
+weights = [0.5, 0.5]  # Adjust these weights as needed
+threshold = 1  # Adjust threshold as needed
 
-# Plotting
-plt.figure(figsize=(8, 6))
-plt.scatter(range(len(Y)), Y, color='blue', label='Actual')
-plt.scatter(range(len(predictions)), predictions, color='red', label='Predicted')
-plt.title('Actual vs Predicted')
-plt.xlabel('Sample Index')
-plt.ylabel('Target')
-plt.legend()
-plt.show()
+# Create a McCulloch-Pitts neuron
+neuron = McCullochPittsNeuron(weights, threshold)
+
+# Plot the decision boundary
+plot_decision_boundary(neuron, X, y)
+
+# Calculate accuracy
+predictions = neuron.activate(X)
+accuracy = np.mean(predictions == y) * 100
+print("Accuracy: {:.2f}%".format(accuracy))
+
+# Make a prediction for a new data point
+new_data_point = np.array([[60, 130]])  # Adjust as needed
+prediction = neuron.activate(new_data_point)
+if prediction[0] == 1:
+    print("The person is predicted to have heart disease.")
+else:
+    print("The person is predicted not to have heart disease.")
