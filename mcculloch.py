@@ -42,9 +42,6 @@ threshold = 1  # Adjust threshold as needed
 # Create a McCulloch-Pitts neuron
 neuron = McCullochPittsNeuron(weights, threshold)
 
-# Plot the decision boundary
-plot_decision_boundary(neuron, X, y)
-
 # Calculate accuracy
 predictions = neuron.activate(X)
 accuracy = np.mean(predictions == y) * 100
@@ -57,3 +54,6 @@ if prediction[0] == 1:
     print("The person is predicted to have heart disease.")
 else:
     print("The person is predicted not to have heart disease.")
+
+# Plot the decision boundary
+plot_decision_boundary(neuron, X, y)
