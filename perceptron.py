@@ -62,14 +62,19 @@ y_test_pred = perceptron.predict(X_test)
 test_accuracy = np.mean(y_test_pred == y_test)
 print("Accuracy on test data:", test_accuracy)
 
-# Building a predictive system
-input_data = np.array([[54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]])
 
-# Predict using the trained Perceptron
-prediction = perceptron.predict(input_data)
+# """هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
+# target بتاعه 0
+# فالشخص تنبؤ بتاعه المفروض يطلع معندوش مرض قلب
+# """
+# # Building a predictive system
+# input_data = np.array([[54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]])
 
-# Output the prediction
-if prediction[0] == 1:
-    print("The person is predicted to have heart disease.")
-else:
-    print("The person is predicted not to have heart disease.")
+# # Predict using the trained Perceptron
+# prediction = perceptron.predict(input_data)
+
+# # Output the prediction
+# if prediction[0] == 1:
+#     print("The person is predicted to have heart disease.")
+# else:
+#     print("The person is predicted not to have heart disease.")
