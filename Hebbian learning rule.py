@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
 # Define HebbianLearning class
 class HebbianLearning:
-    def __init__(self, learning_rate=0.01, epochs=100):
+    def __init__(self, learning_rate=0, epochs=100):
         self.learning_rate = learning_rate
         self.epochs = epochs
         self.weights = None
@@ -21,12 +20,14 @@ class HebbianLearning:
                 update = self.learning_rate * y_predicted * X[i] * y[i]
                 self.weights += update
                 self.bias += self.learning_rate * y_predicted * y[i]
-
+    
+    def activation_function(self, x):
+        return np.where(x >= 0, 1, 0)
+    
     def predict(self, X):
         y_predicted = np.dot(X, self.weights) + self.bias
-        return np.where(y_predicted >= 0, 1, 0)
-
-# Load the heart diseases dataset
+        return self.activation_function(y_predicted)
+ 
 heart_data = pd.read_csv("heart.csv")
 
 # Splitting the features and target
@@ -67,14 +68,9 @@ print("Actual target for this input data:", actual_target)
 # Predict using the trained model
 prediction = hebbian_learning.predict(input_data)
 
-# Output the prediction
-if prediction[0] == 1:
-    print("The person is predicted to have heart disease.")
-else:
-    print("The person is predicted not to have heart disease.")
 
 # Check if prediction matches actual target
 if prediction[0] == actual_target:
-    print("The prediction matches the actual target.")
+    print("The prediction matches the actual target.\nThe person is predicted to have heart disease.")
 else:
-    print("The prediction does not match the actual target. The accuracy is low.")
+    print("The prediction does not match the actual target. The accuracy is low.\nThe person is predicted not to have heart disease.")
