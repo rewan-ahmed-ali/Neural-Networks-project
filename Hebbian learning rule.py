@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+
 # Define HebbianLearning class
 class HebbianLearning:
     def __init__(self, learning_rate=0, epochs=100):
@@ -58,19 +58,21 @@ y_test_pred = hebbian_learning.predict(X_test)
 test_accuracy = np.mean(y_test_pred == y_test)
 print("Accuracy on test data:", test_accuracy)
 
+
+"""هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
+target بتاعه 0"""
 # Building a predictive system
-input_data = np.array([[52, 1, 0, 125, 212, 0, 1, 168, 0, 1, 2, 2, 3]])
+input_data = np.array([[52,1,0,125,212,0,1,168,0,1,2,2,3]])
 
-# Get the actual target for this input data
-actual_target = 0  # Assuming it's not a heart disease case
+# Get the actual target for the last row of the input data
+actual_target = heart_data['target'].iloc[-1]
 print("Actual target for this input data:", actual_target)
-
 # Predict using the trained model
 prediction = hebbian_learning.predict(input_data)
-
-
 # Check if prediction matches actual target
 if prediction[0] == actual_target:
-    print("The prediction matches the actual target.\nThe person is predicted to have heart disease.")
+    print("The prediction does not match the actual target. The accuracy is low.")
+    print("The person is predicted to have heart disease.")
 else:
-    print("The prediction does not match the actual target. The accuracy is low.\nThe person is predicted not to have heart disease.")
+    print("The prediction matches the actual target.")
+    print("The person is predicted not to have heart disease.")
