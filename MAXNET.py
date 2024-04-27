@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 from random import uniform
 
 def activation_fn(x):
@@ -5,8 +7,16 @@ def activation_fn(x):
         return x
     return 0
 
+# Read input data from heart.csv
+data = pd.read_csv("heart.csv")
+
+# Select a row (e.g., the first row)
+selected_row = data.iloc[0, :-1]  # Exclude the last column (target)
+
+# Convert the selected row to decimal numbers
+activations = selected_row.astype(float).values
+
 # Step 1 - Initialize weights and activations
-activations = [0.3, 0.5, 0.7, 0.9]
 m = len(activations)
 k = 0.2
 
@@ -23,11 +33,13 @@ while True:  # Step 2
     
     a_old = a_new.copy()  # Step 4 - Save activations for use in each iteration
     
+    # Print current activations for each epoch
+    print('EPOCH {} - activations = {}'.format(count + 1, a_old))
+    
     if sum(a_new) == max(a_new):  # Step 5 - Test for stopping condition
         break
     
     a_new = []
     count += 1
-    print('EPOCH {} - activations = {}'.format(count, a_old))
 
 print('The final activations are {}'.format(a_new))
