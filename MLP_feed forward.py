@@ -19,22 +19,6 @@ def forward(self, X):
         self.a2 = self.sigmoid(self.z2)
         return self.a2
 
-def backward(self, X, y, learning_rate):
-        # Backpropagation
-        m = X.shape[0]
-        # Compute gradients
-        dZ2 = self.a2 - y
-        dW2 = (1 / m) * np.dot(self.a1.T, dZ2)
-        db2 = (1 / m) * np.sum(dZ2, axis=0, keepdims=True)
-        dZ1 = np.dot(dZ2, self.W2.T) * self.relu_derivative(self.z1)
-        dW1 = (1 / m) * np.dot(X.T, dZ1)
-        db1 = (1 / m) * np.sum(dZ1, axis=0, keepdims=True)
-        self.W1 -= learning_rate * dW1
-        self.b1 -= learning_rate * db1
-        self.W2 -= learning_rate * dW2
-        self.b2 -= learning_rate * db2
-
-
 Heart_Data = pd.read_csv("heart.csv")
 X = Heart_Data.drop(columns='target', axis=1).values.astype('float32')
 Y = Heart_Data['target'].values.astype('float32')  # Ensure labels are float
