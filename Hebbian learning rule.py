@@ -62,17 +62,17 @@ print("Accuracy on test data:", test_accuracy)
 """هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
 target بتاعه 0"""
 # Building a predictive system
-input_data = np.array([[52,1,0,125,212,0,1,168,0,1,2,2,3]])
-
+input_data = np.array([[58,0,0,100,248,0,0,122,0,1,1,0,2]])
+print("\ninput data ",input_data)
 # Get the actual target for the last row of the input data
-actual_target = heart_data['target'].iloc[-1]
-print("Actual target for this input data:", actual_target)
+actual_target = heart_data['target'].iloc[-6]
+print("\nActual target for this input data:", actual_target)
 # Predict using the trained model
 prediction = hebbian_learning.predict(input_data)
 # Check if prediction matches actual target
 if prediction[0] == actual_target:
-    print("The prediction does not match the actual target. The accuracy is low.")
+    print("\nThe prediction matches the actual target.")
     print("The person is predicted to have heart disease.")
 else:
-    print("The prediction matches the actual target.")
+    print("\nThe prediction does not match the actual target. The accuracy is low.")
     print("The person is predicted not to have heart disease.")
