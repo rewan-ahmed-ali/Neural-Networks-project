@@ -9,6 +9,28 @@ def sigmoid(self, z):
 def relu(self, z):
         return np.maximum(0, z)
 
+def forward(self, X):
+        # Forward pass
+        self.z1 = np.dot(X, self.W1) + self.b1
+        self.a1 = self.relu(self.z1)
+        self.z2 = np.dot(self.a1, self.W2) + self.b2
+        self.a2 = self.sigmoid(self.z2)
+        return self.a2
+def backward(self, X, y, learning_rate):
+        # Backpropagation
+        m = X.shape[0]
+        # Compute gradients
+        dZ2 = self.a2 - y
+        dW2 = (1 / m) * np.dot(self.a1.T, dZ2)
+        db2 = (1 / m) * np.sum(dZ2, axis=0, keepdims=True)
+        dZ1 = np.dot(dZ2, self.W2.T) * self.relu_derivative(self.z1)
+        dW1 = (1 / m) * np.dot(X.T, dZ1)
+        db1 = (1 / m) * np.sum(dZ1, axis=0, keepdims=True)
+        self.W1 -= learning_rate * dW1
+        self.b1 -= learning_rate * db1
+        self.W2 -= learning_rate * dW2
+        self.b2 -= learning_rate * db2
+
 Heart_Data = pd.read_csv("heart.csv")
 X = Heart_Data.drop(columns='target', axis=1).values.astype('float32')
 Y = Heart_Data['target'].values.astype('float32')  # Ensure labels are float
@@ -96,19 +118,19 @@ def confusion_matrix_custom(y_true, y_pred):
 print("Confusion Matrix:")
 print(confusion_matrix_custom(Y, y_pred))
 
-def preprocess_input_data(data, mean, std):
-    data_array = np.array(data)
-    data_array = data_array.reshape(1, -1)
-    data_array = (data_array - mean) / std
-    return data_array
+# def preprocess_input_data(data, mean, std):
+#     data_array = np.array(data)
+#     data_array = data_array.reshape(1, -1)
+#     data_array = (data_array - mean) / std
+#     return data_array
 
-test_data = [54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]
-processed_test_data = preprocess_input_data(test_data, mean, std)
-prediction = model.predict(processed_test_data)
-if prediction[0] == 1:
-    print("The person is predicted to have heart disease.")
-else:
-    print("The person is predicted not to have heart disease.")
+# test_data = [54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]
+# processed_test_data = preprocess_input_data(test_data, mean, std)
+# prediction = model.predict(processed_test_data)
+# if prediction[0] == 1:
+#     print("The person is predicted to have heart disease.")
+# else:
+#     print("The person is predicted not to have heart disease.")
 
 import matplotlib.pyplot as plt
 plt.plot(history.history['accuracy'], label='Training Accuracy')
