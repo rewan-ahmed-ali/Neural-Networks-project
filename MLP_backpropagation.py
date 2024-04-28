@@ -21,7 +21,7 @@ model = Sequential([
     Dense(128, activation='relu'),  
     Dense(1, activation='sigmoid')  
 ])
-
+model.summary()
 loss_fn = tf.keras.losses.BinaryCrossentropy()
 
 # optimizer
