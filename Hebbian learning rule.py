@@ -57,13 +57,14 @@ print("Accuracy on test data:", test_accuracy)
 هجرب علي بيانات صف من صفوف الداتا فمثلا الصف 12
 target 1 """
 input_data = np.array([[71,0,0,112,149,0,1,125,0,1.6,1,0,2]])
+print("\nTesting the network:")
 # print("\ninput data ",input_data)
 
 actual_target = heart_data['target'].iloc[-6]
-print("\nActual target for this input data:", actual_target)
+print("\tActual target for this input data:", actual_target)
 
 prediction = hebbian_learning.predict(input_data)
-print("Prediction |", prediction)
+print("\tPrediction |", prediction)
 if prediction[0] == actual_target:
     print("\nThe prediction matches the actual target.")
     print("The person is predicted to have heart disease.")
