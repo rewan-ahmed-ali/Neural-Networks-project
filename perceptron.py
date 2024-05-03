@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 class Perceptron:
-    def __init__(self, learning_rate=0.1, epochs=100):
+    def __init__(self, learning_rate=1, epochs=100):
         self.learning_rate = learning_rate
         self.epochs = epochs
         self.weights = None
@@ -14,30 +14,32 @@ class Perceptron:
         self.bias = 0
 
         for _ in range(self.epochs):
+            weights_changed = False  # check if any weights have changed
             for i in range(n_samples):
-                y_predicted = np.dot(X[i], self.weights) + self.bias
-
+                activation = np.dot(X[i], self.weights) + self.bias
+                y_predicted = self.activation_function(activation)
                 if y_predicted != y[i]:
-                    self.weights = self.weights + self.learning_rate * (y[i] * X[i])
-                    self.bias = self.bias + self.learning_rate * (y[i])
+                    self.weights += self.learning_rate * y[i] * X[i]
+                    self.bias += self.learning_rate * y[i]
+                    weights_changed = True
+            if not weights_changed:  # If no weights changed, stop training
+                break
 
-    def activation_function(self, y_predicted):
-        if y_predicted > 0:
+    def activation_function(self, activation):
+        if activation > 0:
             return 1
-        elif y_predicted == 0:
-            return 0
-        else:
+        elif activation <= 0:
             return -1
 
     def predict(self, X):
-        y_predicted = np.dot(X, self.weights) + self.bias
-        return np.array([self.activation_function(y) for y in y_predicted])
+        activation = np.dot(X, self.weights) + self.bias
+        return np.array([self.activation_function(activation) for activation in activation])
 
 
 heart_data = pd.read_csv("heart.csv")
 
 X = heart_data.drop(columns='target').values
-y = heart_data['target'].values
+y = np.where(heart_data['target'].values == 0, -1, 1)  # Convert target to -1, 1
 
 def split_data(X, y, test_size=0.2):
     n_samples = X.shape[0]
@@ -61,74 +63,31 @@ print("Custom Perceptron Accuracy:", test_accuracy)
 
 
 
+input_data = np.array([[71,0,0,112,149,0,1,125,0,1.6,1,0,2]])
+prediction = perceptron.predict(input_data)
+print("Prediction |", prediction)
+
+if prediction[0] == 1:
+    print("The person is predicted to have heart disease.")
+else:
+    print("The person is predicted not to have heart disease.")
 
 
+# Confusion matrix calculation
+conf_matrix = np.zeros((2, 2))
 
+for i in range(len(y_test)):
+    true_label = y_test[i]
+    pred_label = y_test_pred[i]
+    
+    if true_label == 1 and pred_label == 1:  # True Positive
+        conf_matrix[0, 0] += 1
+    elif true_label == 1 and pred_label == -1:  # False Negative
+        conf_matrix[0, 1] += 1
+    elif true_label == -1 and pred_label == 1:  # False Positive
+        conf_matrix[1, 0] += 1
+    elif true_label == -1 and pred_label == -1:  # True Negative
+        conf_matrix[1, 1] += 1
 
-
-
-
-
-
-
-
-
-def calculate_classification_report(y_true, y_pred):
-    TP = np.sum(np.logical_and(y_true == 1, y_pred == 1))
-    TN = np.sum(np.logical_and(y_true == 0, y_pred == 0))
-    FP = np.sum(np.logical_and(y_true == 0, y_pred == 1))
-    FN = np.sum(np.logical_and(y_true == 1, y_pred == 0))
-    precision_0 = TN / (TN + FP)
-    recall_0 = TN / (TN + FN)
-    f1_score_0 = 2 * precision_0 * recall_0 / (precision_0 + recall_0)
-    precision_1 = TP / (TP + FP)
-    recall_1 = TP / (TP + FN)
-    f1_score_1 = 2 * precision_1 * recall_1 / (precision_1 + recall_1)
-    accuracy = (TP + TN) / (TP + TN + FP + FN)
-    return {
-        '0.0': {'precision': precision_0, 'recall': recall_0, 'f1-score': f1_score_0, 'support': len(y_true) - np.sum(y_true)},
-        '1.0': {'precision': precision_1, 'recall': recall_1, 'f1-score': f1_score_1, 'support': np.sum(y_true)},
-        'accuracy': accuracy,
-        'macro avg': {'precision': (precision_0 + precision_1) / 2, 'recall': (recall_0 + recall_1) / 2, 'f1-score': (f1_score_0 + f1_score_1) / 2, 'support': len(y_true)},
-        'weighted avg': {'precision': (precision_0 * (len(y_true) - np.sum(y_true)) + precision_1 * np.sum(y_true)) / len(y_true), 
-                         'recall': (recall_0 * (len(y_true) - np.sum(y_true)) + recall_1 * np.sum(y_true)) / len(y_true), 
-                         'f1-score': (f1_score_0 * (len(y_true) - np.sum(y_true)) + f1_score_1 * np.sum(y_true)) / len(y_true), 
-                         'support': len(y_true)}
-    }
-
-classification_result = calculate_classification_report(y_test, y_test_pred)
-print("\nClassification Report:")
-print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("", "precision", "recall", "f1-score", "support"))
-print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("0.0", f"{classification_result['0.0']['precision']:.2f}", 
-                                                  f"{classification_result['0.0']['recall']:.2f}", 
-                                                  f"{classification_result['0.0']['f1-score']:.2f}", 
-                                                  classification_result['0.0']['support']))
-print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("1.0", f"{classification_result['1.0']['precision']:.2f}", 
-                                                  f"{classification_result['1.0']['recall']:.2f}", 
-                                                  f"{classification_result['1.0']['f1-score']:.2f}", 
-                                                  classification_result['1.0']['support']))
-print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("accuracy", "", "", f"{classification_result['accuracy']:.2f}", ""))
-print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("macro avg", f"{classification_result['macro avg']['precision']:.2f}", 
-                                                  f"{classification_result['macro avg']['recall']:.2f}", 
-                                                  f"{classification_result['macro avg']['f1-score']:.2f}", 
-                                                  classification_result['macro avg']['support']))
-print("{:<45} {:<12} {:<12} {:<12} {:<12}".format("weighted avg", f"{classification_result['weighted avg']['precision']:.2f}", 
-                                                  f"{classification_result['weighted avg']['recall']:.2f}", 
-                                                  f"{classification_result['weighted avg']['f1-score']:.2f}", 
-                                                  classification_result['weighted avg']['support']))
-
-# """هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
-# target بتاعه 0
-# فالشخص تنبؤ بتاعه المفروض يطلع معندوش مرض قلب
-# """
-# # Building a predictive system
-# input_data = np.array([[54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]])
-
-# # Predict using the trained Perceptron
-# prediction = perceptron.predict(input_data)
-
-# # Output the prediction
-# if prediction[0] == 1:
-#     print("The person is predicted to have heart disease.")
-# else:
-#     print("The person is predicted not to have heart disease.")
+print("Confusion Matrix:")
+print(conf_matrix)
