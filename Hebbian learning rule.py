@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 
 class HebbianLearning:
-    def __init__(self, learning_rate=0, epochs=100):
-        self.learning_rate = learning_rate
+    def __init__(self,  epochs=100):
         self.epochs = epochs
         self.weights = None
         self.bias = None
@@ -16,10 +15,10 @@ class HebbianLearning:
         for _ in range(self.epochs):
             for i in range(n_samples):
                 # y_predicted = np.dot(X[i], self.weights) + self.bias
-                update = self.learning_rate  * X[i] * y[i]
+                update =   X[i] * y[i]
                 self.weights += update
-                self.bias += self.learning_rate * y[i]
-    
+                self.bias +=  y[i]
+
     def activation_function(self, x):
         return np.where(x >= 0, 1, 0)
     
@@ -29,11 +28,9 @@ class HebbianLearning:
  
 heart_data = pd.read_csv("heart.csv")
 
-
 X = heart_data.drop(columns='target').values
 y = heart_data['target'].values  
 
-# Splitting the data into training and testing sets
 def split_data(X, y, test_size=0.2):
     n_samples = X.shape[0]
     n_test = int(n_samples * test_size)
@@ -43,7 +40,7 @@ def split_data(X, y, test_size=0.2):
 
 X_train, X_test, y_train, y_test = split_data(X, y)
 
-# Create and train the HebbianLearning model
+
 hebbian_learning = HebbianLearning()
 hebbian_learning.train(X_train, y_train)
 
@@ -56,8 +53,9 @@ test_accuracy = np.mean(y_test_pred == y_test)
 print("Accuracy on test data:", test_accuracy)
 
 
-"""هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
-target بتاعه 0"""
+"""
+هجرب علي بيانات صف من صفوف الداتا فمثلا الصف 12
+target 1 """
 input_data = np.array([[71,0,0,112,149,0,1,125,0,1.6,1,0,2]])
 # print("\ninput data ",input_data)
 
