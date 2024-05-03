@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 class Perceptron:
-    def __init__(self, learning_rate=1, epochs=100):
+    def __init__(self, learning_rate=.1, epochs=100):
         self.learning_rate = learning_rate
         self.epochs = epochs
         self.weights = None
