@@ -26,9 +26,9 @@ class Perceptron:
                 break
 
     def activation_function(self, activation):
-        if activation > 0:
+        if activation >= 0:
             return 1
-        elif activation <= 0:
+        elif activation < 0:
             return -1
 
     def predict(self, X):
