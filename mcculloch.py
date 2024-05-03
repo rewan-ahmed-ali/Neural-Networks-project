@@ -11,17 +11,14 @@ class McCullochPittsNeuron:
         activations = np.where(weighted_sum >= self.threshold, 1, 0)  # Apply threshold
         return activations
 
-
 data = pd.read_csv('heart.csv')
 
-# Extract features and target
 X = data.drop('target', axis=1).values
 y = data['target'].values
 
 num_features = X.shape[1]
 weights = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) 
 
-# تحديد حاجز العتبة بناءً على عدد المدخلات والأوزان الموجبة والسالبة
 threshold = num_features * np.sum(weights > 0) - np.sum(weights)
 
 neuron = McCullochPittsNeuron(weights, threshold)
