@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-# Define HebbianLearning class
 class HebbianLearning:
     def __init__(self, learning_rate=0, epochs=100):
         self.learning_rate = learning_rate
@@ -16,10 +15,10 @@ class HebbianLearning:
 
         for _ in range(self.epochs):
             for i in range(n_samples):
-                y_predicted = np.dot(X[i], self.weights) + self.bias
-                update = self.learning_rate * y_predicted * X[i] * y[i]
+                # y_predicted = np.dot(X[i], self.weights) + self.bias
+                update = self.learning_rate  * X[i] * y[i]
                 self.weights += update
-                self.bias += self.learning_rate * y_predicted * y[i]
+                self.bias += self.learning_rate * y[i]
     
     def activation_function(self, x):
         return np.where(x >= 0, 1, 0)
@@ -30,9 +29,9 @@ class HebbianLearning:
  
 heart_data = pd.read_csv("heart.csv")
 
-# Splitting the features and target
+
 X = heart_data.drop(columns='target').values
-y = heart_data['target'].values  # Keep target values as they are
+y = heart_data['target'].values  
 
 # Splitting the data into training and testing sets
 def split_data(X, y, test_size=0.2):
@@ -48,30 +47,28 @@ X_train, X_test, y_train, y_test = split_data(X, y)
 hebbian_learning = HebbianLearning()
 hebbian_learning.train(X_train, y_train)
 
-# Accuracy on training data
 y_train_pred = hebbian_learning.predict(X_train)
 train_accuracy = np.mean(y_train_pred == y_train)
 print("Accuracy on training data:", train_accuracy)
 
-# Accuracy on test data
 y_test_pred = hebbian_learning.predict(X_test)
 test_accuracy = np.mean(y_test_pred == y_test)
 print("Accuracy on test data:", test_accuracy)
 
 
-# """هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
-# target بتاعه 0"""
-# input_data = np.array([[58,0,0,100,248,0,0,122,0,1,1,0,2]])
+"""هجرب علي بيانات صف من صفوف الداتا فمثلا الصف الاول 
+target بتاعه 0"""
+input_data = np.array([[71,0,0,112,149,0,1,125,0,1.6,1,0,2]])
 # print("\ninput data ",input_data)
 
-# actual_target = heart_data['target'].iloc[-6]
-# print("\nActual target for this input data:", actual_target)
+actual_target = heart_data['target'].iloc[-6]
+print("\nActual target for this input data:", actual_target)
 
-# prediction = hebbian_learning.predict(input_data)
-
-# if prediction[0] == actual_target:
-#     print("\nThe prediction matches the actual target.")
-#     print("The person is predicted to have heart disease.")
-# else:
-#     print("\nThe prediction does not match the actual target. The accuracy is low.")
-#     print("The person is predicted not to have heart disease.")
+prediction = hebbian_learning.predict(input_data)
+print("Prediction |", prediction)
+if prediction[0] == actual_target:
+    print("\nThe prediction matches the actual target.")
+    print("The person is predicted to have heart disease.")
+else:
+    print("\nThe prediction does not match the actual target. The accuracy is low.")
+    print("The person is predicted not to have heart disease.")
