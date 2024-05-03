@@ -10,11 +10,6 @@ class AdaptiveLinearNeuron(object):
         self.tolerance = tolerance
 
     def fit(self, X, y):
-        """Fit training data
-        X : Training vectors, X.shape : [#samples, #features]
-        y : Target values, y.shape : [#samples]
-        """
-
         # Initialize weights and bias
         self.weight = np.random.random(1 + X.shape[1])  # Step 1
         self.bias = np.random.random()  # Step 1
@@ -24,6 +19,8 @@ class AdaptiveLinearNeuron(object):
 
         # Cost function
         self.cost = []
+
+        total_errors = []  # Store the total errors for each epoch
 
         largest_weight_change = np.inf
         iter_count = 0
@@ -43,12 +40,13 @@ class AdaptiveLinearNeuron(object):
                 weight_change = max(weight_change, np.max(np.abs(self.rate * xi.dot(error))))  # Step 7
 
                 cost_epoch += 0.5 * error ** 2  # Step 7
-            
-            self.cost.append(cost_epoch)  # Step 7
-            largest_weight_change = weight_change  # Step 7
-            iter_count += 1  # Step 2
 
-        return self
+            self.cost.append(cost_epoch)
+            total_errors.append(cost_epoch)  # Store the total error for this epoch
+            largest_weight_change = weight_change
+            iter_count += 1
+
+        return total_errors
 
     def net_input(self, X):
         """Calculate net input"""
@@ -85,13 +83,11 @@ X_normalized = (X - X.mean(axis=0)) / X.std(axis=0)
 X_train, X_test, y_train, y_test = train_test_split(X_normalized, y, test_size=0.2, random_state=42)
 
 # Build and train the ADALINE model with normalized features
-adaline = AdaptiveLinearNeuron(rate=0.01, niter=10, tolerance=1e-5).fit(X_train, y_train)
-
+adaline = AdaptiveLinearNeuron(rate=0.01, niter=10, tolerance=1e-5)
+errors = adaline.fit(X_train, y_train)
 # Test the model
 predictions = adaline.test(X_test)
 
-# Print the predictions
-# print("Predictions:", predictions)
 # Calculate accuracy for training data
 def accuracy_score(y_true, y_pred):
     return np.mean(y_true == y_pred)
@@ -99,8 +95,15 @@ def accuracy_score(y_true, y_pred):
 # Train accuracy
 train_predictions = adaline.predict(X_train)
 train_accuracy = accuracy_score(y_train, train_predictions)
-print("Training Accuracy:", train_accuracy)
 
 # Test accuracy
 test_accuracy = accuracy_score(y_test, predictions)
-print("Test Accuracy:", test_accuracy)
+
+# Print the table for total mean square error for each epoch
+print("Summary Results")
+print("Epoch\tTotal Mean Square Error")
+for epoch, error in enumerate(errors, start=1):
+    print(f"Epoch {epoch}\t{error:10.2f}")
+
+# Print the error in a specific format
+print(f"Error: {errors[-1]:.2f}")
