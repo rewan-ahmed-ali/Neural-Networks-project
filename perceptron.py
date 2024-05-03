@@ -39,7 +39,7 @@ class Perceptron:
 heart_data = pd.read_csv("heart.csv")
 
 X = heart_data.drop(columns='target').values
-y = np.where(heart_data['target'].values == 0, -1, 1)  # Convert target to -1, 1
+y = heart_data['target'].values  
 
 def split_data(X, y, test_size=0.2):
     n_samples = X.shape[0]
@@ -73,21 +73,20 @@ else:
     print("The person is predicted not to have heart disease.")
 
 
-# Confusion matrix calculation
-conf_matrix = np.zeros((2, 2))
 
-for i in range(len(y_test)):
-    true_label = y_test[i]
-    pred_label = y_test_pred[i]
+# conf_matrix = np.zeros((2, 2))
+# for i in range(len(y_test)):
+#     true_label = y_test[i]
+#     pred_label = y_test_pred[i]
     
-    if true_label == 1 and pred_label == 1:  # True Positive
-        conf_matrix[0, 0] += 1
-    elif true_label == 1 and pred_label == -1:  # False Negative
-        conf_matrix[0, 1] += 1
-    elif true_label == -1 and pred_label == 1:  # False Positive
-        conf_matrix[1, 0] += 1
-    elif true_label == -1 and pred_label == -1:  # True Negative
-        conf_matrix[1, 1] += 1
+#     if true_label == 1 and pred_label == 1:  # True Positive
+#         conf_matrix[0, 0] += 1
+#     elif true_label == 1 and pred_label == 0:  # False Negative
+#         conf_matrix[0, 1] += 1
+#     elif true_label == 0 and pred_label == 1:  # False Positive
+#         conf_matrix[1, 0] += 1
+#     elif true_label == 0 and pred_label == 0:  # True Negative
+#         conf_matrix[1, 1] += 1
 
-print("Confusion Matrix:")
-print(conf_matrix)
+# print("Confusion Matrix:")
+# print(conf_matrix)
