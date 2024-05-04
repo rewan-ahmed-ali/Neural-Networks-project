@@ -84,9 +84,11 @@ print(f"Test Accuracy: {test_accuracy}")
 
 print("Summary Results")
 print("Epoch\tTotal Mean Square Error")
-for epoch, error in enumerate(sorted(errors, reverse=True), start=1):
+sorted_errors = sorted(errors, reverse=True)
+for epoch, error in enumerate(sorted_errors, start=1):
     print(f"Epoch {epoch}\t{error:10.2f}")
-print(f"Error:\t {errors[-1]:.2f}")
+print(f"Error:\t {sorted_errors[-1]:.2f}")
+
 
 
 # print("Final weights:", adaline.weight)
