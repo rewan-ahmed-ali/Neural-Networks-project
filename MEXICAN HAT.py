@@ -56,8 +56,8 @@ for i in range(len(X)):
 
 # Applying Mexican Hat Net with activation function
 output = np.zeros(len(X))
-t_max = 10  # Setting maximum iteration counter
-t = 1  # Initialize iteration counter
+t_max = 10  
+t = 1  
 
 while t < t_max:  # Step 3
     for i in range(0, len(X)):
@@ -76,3 +76,40 @@ while t < t_max:  # Step 3
 
 print('')
 print("Output:", output)
+
+
+
+true_labels = np.array(data.iloc[row_index, -1])
+predicted_labels = (output > 0).astype(int)
+accuracy = np.mean(predicted_labels == true_labels)
+
+
+print("Accuracy:", accuracy)
+
+# Prediction
+if predicted_labels[0] == 1:
+    print("The person is predicted to have heart disease.")
+else:
+    print("The person is predicted not to have heart disease.")
+
+
+import matplotlib.pyplot as plt
+# Plotting
+plt.figure(figsize=(10, 6))
+
+plt.subplot(2, 1, 1)
+plt.plot(X, color='blue')
+plt.title('Input Data')
+plt.xlabel('Index')
+plt.ylabel('Value')
+
+plt.subplot(2, 1, 2)
+plt.plot(output, color='green')
+plt.title('Output of Mexican Hat Net')
+plt.xlabel('Index')
+plt.ylabel('Value')
+
+
+
+plt.tight_layout()
+plt.show()
