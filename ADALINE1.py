@@ -10,21 +10,15 @@ class AdaptiveLinearNeuron(object):
         self.tolerance = tolerance
 
     def fit(self, X, y):
-        # Initialize weights and bias
         self.weight = np.random.random(1 + X.shape[1])  # Step 1
         self.bias = np.random.random()  # Step 1
-
-        # Number of misclassifications
         self.errors = []
-
-        # Cost function
         self.cost = []
-
-        total_errors = []  # Store the total errors for each epoch
+        total_errors = []  
 
         largest_weight_change = np.inf
         iter_count = 0
-
+        # While stopping condition is false, do steps 3 3– 7.
         while largest_weight_change > self.tolerance and iter_count < self.niter:  # Step 2
             cost_epoch = 0
             weight_change = 0
@@ -35,10 +29,9 @@ class AdaptiveLinearNeuron(object):
                 error = (target - output)  # Step 4
                 self.weight[1:] += self.rate * xi.dot(error)  # Step 6
                 self.bias += self.rate * error  # Step 6
-
+                total_mean_square_error=(target-output)^2
                 # Calculate the largest weight change
                 weight_change = max(weight_change, np.max(np.abs(self.rate * xi.dot(error))))  # Step 7
-
                 cost_epoch += 0.5 * error ** 2  # Step 7
 
             self.cost.append(cost_epoch)
@@ -68,18 +61,12 @@ class AdaptiveLinearNeuron(object):
             predictions.append(output)  # Step 5
         return predictions
 
-# Load the heart disease dataset
-heart_data = pd.read_csv('heart.csv')
 
-# Prepare the data
+heart_data = pd.read_csv('heart.csv')
 X = heart_data.drop(columns='target').values
 y = heart_data['target'].values
 y = np.where(y == 0, -1, 1)
-
-# Normalize the input features
 X_normalized = (X - X.mean(axis=0)) / X.std(axis=0)
-
-# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_normalized, y, test_size=0.2, random_state=42)
 
 # Build and train the ADALINE model with normalized features
@@ -88,22 +75,17 @@ errors = adaline.fit(X_train, y_train)
 # Test the model
 predictions = adaline.test(X_test)
 
-# Calculate accuracy for training data
 def accuracy_score(y_true, y_pred):
     return np.mean(y_true == y_pred)
 
-# Train accuracy
 train_predictions = adaline.predict(X_train)
 train_accuracy = accuracy_score(y_train, train_predictions)
 
-# Test accuracy
 test_accuracy = accuracy_score(y_test, predictions)
 
-# Print the table for total mean square error for each epoch
 print("Summary Results")
 print("Epoch\tTotal Mean Square Error")
 for epoch, error in enumerate(errors, start=1):
     print(f"Epoch {epoch}\t{error:10.2f}")
 
-# Print the error in a specific format
-print(f"Error: {errors[-1]:.2f}")
+print(f"Error:\t {errors[-1]:.2f}")
