@@ -66,7 +66,6 @@ y = np.where(y == 0, -1, 1)
 X_normalized = (X - X.mean(axis=0)) / X.std(axis=0)
 X_train, X_test, y_train, y_test = train_test_split(X_normalized, y, test_size=0.2, random_state=42)
 
-
 adaline = AdaptiveLinearNeuron(rate=0.01, epoch=10, tolerance=1e-5)
 errors = adaline.fit(X_train, y_train)
 # Test the model
@@ -77,6 +76,8 @@ def accuracy_score(y_true, y_pred):
 train_predictions = adaline.predict(X_train)
 train_accuracy = accuracy_score(y_train, train_predictions)
 test_accuracy = accuracy_score(y_test, predictions)
+print(f"Training Accuracy: {train_accuracy}")
+print(f"Test Accuracy: {test_accuracy}")
 
 
 print("Summary Results")
