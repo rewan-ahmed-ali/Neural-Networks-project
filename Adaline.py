@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 class AdaptiveLinearNeuron(object):
-    def __init__(self, rate=0.01, epoch=10, tolerance=1):
+    def __init__(self, rate=0.01, epoch=3, tolerance=1):
         self.rate = rate
         self.epoch = epoch
         self.tolerance = tolerance
@@ -38,7 +38,7 @@ class AdaptiveLinearNeuron(object):
             total_errors.append(cost_epoch) 
             largest_weight_change = weight_change
             iter_count += 1
-
+        
         return total_errors
 
     def net_input(self, X):
@@ -68,7 +68,7 @@ y = np.where(y == 0, -1, 1)
 X_normalized = (X - X.mean(axis=0)) / X.std(axis=0)
 X_train, X_test, y_train, y_test = train_test_split(X_normalized, y, test_size=0.2, random_state=42)
 
-adaline = AdaptiveLinearNeuron(rate=0.01, epoch=10, tolerance=1e-5)
+adaline = AdaptiveLinearNeuron(rate=0.01, epoch=3, tolerance=1e-5)
 errors = adaline.fit(X_train, y_train)
 # Test the model
 predictions = adaline.test(X_test)
