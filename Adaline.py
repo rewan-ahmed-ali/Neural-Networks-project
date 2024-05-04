@@ -86,4 +86,7 @@ for epoch, error in enumerate(errors, start=1):
     total_mean_square_error = error  # Calculate the total mean square error
     print(f"Epoch {epoch}\t{total_mean_square_error:10.2f}")
 print(f"Error:\t {errors[-1]:.2f}")
- 
+
+# print("Final weights:", adaline.weight)
+# print("Final bias:", adaline.bias)
+
