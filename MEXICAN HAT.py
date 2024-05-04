@@ -109,7 +109,5 @@ plt.title('Output of Mexican Hat Net')
 plt.xlabel('Index')
 plt.ylabel('Value')
 
-
-
 plt.tight_layout()
 plt.show()
