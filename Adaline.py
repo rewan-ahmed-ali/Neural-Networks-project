@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 class AdaptiveLinearNeuron(object):
-    def __init__(self, rate=0.01, epoch=3, tolerance=1):
+    def __init__(self, rate=0.01, epoch=10, tolerance=1e-5):
         self.rate = rate
         self.epoch = epoch
         self.tolerance = tolerance
@@ -68,7 +68,7 @@ y = np.where(y == 0, -1, 1)
 X_normalized = (X - X.mean(axis=0)) / X.std(axis=0)
 X_train, X_test, y_train, y_test = train_test_split(X_normalized, y, test_size=0.2, random_state=42)
 
-adaline = AdaptiveLinearNeuron(rate=0.01, epoch=3, tolerance=1e-5)
+adaline = AdaptiveLinearNeuron(rate=0.01, epoch=10, tolerance=1e-5)
 errors = adaline.fit(X_train, y_train)
 # Test the model
 predictions = adaline.test(X_test)
@@ -84,10 +84,10 @@ print(f"Test Accuracy: {test_accuracy}")
 
 print("Summary Results")
 print("Epoch\tTotal Mean Square Error")
-for epoch, error in enumerate(errors, start=1):
-    total_mean_square_error = error  # Calculate the total mean square error
-    print(f"Epoch {epoch}\t{total_mean_square_error:10.2f}")
+for epoch, error in enumerate(sorted(errors, reverse=True), start=1):
+    print(f"Epoch {epoch}\t{error:10.2f}")
 print(f"Error:\t {errors[-1]:.2f}")
+
 
 # print("Final weights:", adaline.weight)
 # print("Final bias:", adaline.bias)
