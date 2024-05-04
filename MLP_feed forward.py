@@ -1,16 +1,30 @@
 import numpy as np
 import pandas as pd
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential # type: ignore
+from tensorflow.keras.layers import Dense # type: ignore
 
-def relu(self, z):
-        return np.maximum(0, z)
+def binary_step(z):
+    return np.where(z >= 0, 1, 0)
 
-def relu_derivative(self, z):
-        return np.where(z > 0, 1, 0)
+def linear_activation(x):
+    return x
 
-def sigmoid(self, z):
-        return 1 / (1 + np.exp(-z))
+def relu( x):
+        return np.maximum(0, x)
+
+def leaky_relu(x):
+    return np.where(x > 0, x, 0.01 * x)
+
+def sigmoid( x):
+        return 1 / (1 + np.exp(-x))
+
+def tanh(x):
+    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+
+def softmax(z):
+    exp_z = np.exp(z)
+    return exp_z / np.sum(exp_z, axis=1, keepdims=True)
+
 def forward(self, X):
         # Forward pass
         self.z1 = np.dot(X, self.W1) + self.b1
