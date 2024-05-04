@@ -25,12 +25,14 @@ class AdaptiveLinearNeuron(object):
                 net_input = self.net_input(xi)  # Step 4
                 output = self.activation(net_input)  # Step 4
                 error = (target - output)  # Step 4
-                self.weight[1:] += self.rate * xi.dot(error)  # Step 6
+                self.weight[1:] += self.rate * xi * error  # Step 6 
+                # self.weight[1:] += self.rate * xi.dot(error)  # Step 6
                 self.bias += self.rate * error  # Step 6
-                total_mean_square_error = (target - output) ** 2  # Calculate the total mean square error
+                total_mean_square_error = (target - output) ** 2 
                 # Calculate the largest weight change
                 weight_change = max(weight_change, np.max(np.abs(self.rate * xi.dot(error))))  # Step 7
-                cost_epoch += 0.5 * error ** 2  # Step 7
+                # cost_epoch += 0.5 * error ** 2  # Step 7
+                cost_epoch +=total_mean_square_error
 
             self.cost.append(cost_epoch)
             total_errors.append(cost_epoch) 
