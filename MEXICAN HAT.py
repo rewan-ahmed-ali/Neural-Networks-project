@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def activation_function(x):
     if x < 0:
@@ -32,47 +33,18 @@ w2 = np.array([C1] * (2 * R1 + 1))  # Step 1
 w3 = np.array([C2] * (R2 - R1))  # Step 1
 w = np.concatenate((w1, w2, w3))  # Step 1
 
-# Array Status as matrix
-print("Array Status")
-for i in range(len(X)):
-    sum = 0
-    k = -R1
-    array_status = []
-    while k <= R1:
-        sum = sum + C1 * X_new[i + k]
-        array_status.append(C1 * X_new[i + k])
-        k = k + 1
-    k = -R2
-    while k < -R1:
-        sum = sum + C2 * X_new[i + k]
-        array_status.insert(0, C2 * X_new[i + k])
-        k = k + 1
-    k = R1 + 1
-    while k <= R2:
-        sum = sum + C2 * X_new[i + k]
-        array_status.append(C2 * X_new[i + k])
-        k = k + 1
-    print(np.array(array_status))
-
 # Applying Mexican Hat Net with activation function
 output = np.zeros(len(X))
-t_max = 10  # Setting maximum iteration counter
-t = 1  # Initialize iteration counter
 
-while t < t_max:  # Step 3
-    for i in range(0, len(X)):
-        net_input = np.dot(w, X_new[i:i + len(w)])  # Step 4
-        output[i] = activation_function(net_input)  # Step 5
+for i in range(0, len(X)):
+    net_input = np.dot(w, X_new[i:i + len(w)])  # Step 4
+    output[i] = activation_function(net_input)  # Step 5
 
-        # Step 6: Save current activation functions in X_old
-        X_old = np.copy(output)
-
-    # Step 7: Increment iteration counter
-    t += 1
-
-    # Step 8: Test stopping condition
-    if t >= t_max:
-        break
-
-print('')
-print("Output:", output)
+# Plotting the result
+plt.plot(X, label='Original Signal')
+plt.plot(output, label='Mexican Hat Result')
+plt.legend()
+plt.xlabel('Time')
+plt.ylabel('Amplitude')
+plt.title('Mexican Hat Algorithm Result')
+plt.show()
