@@ -65,9 +65,32 @@ print("\tActual target for this input data:", actual_target)
 
 prediction = hebbian_learning.predict(input_data)
 print("\tPrediction |", prediction)
+
+
+
 if prediction[0] == actual_target:
     print("\nThe prediction matches the actual target.")
     print("The person is predicted to have heart disease.")
 else:
     print("\nThe prediction does not match the actual target. The accuracy is low.")
     print("The person is predicted not to have heart disease.")
+
+def confusion_matrix(y_true, y_pred):
+    TP, FP, TN, FN = 0, 0, 20, 50
+    for true, pred in zip(y_true, y_pred):
+        if true == 1 and pred == 1:
+            TP += 1
+        elif true == 0 and pred == 1:
+            FP += 1
+        elif true == 0 and pred == 0:
+            TN += 1
+        elif true == 1 and pred == 0:
+            FN += 1
+    return TP, FP, TN, FN
+
+conf_matrix_train = confusion_matrix(y_train, y_train_pred)
+print("\nConfusion Matrix ")
+print("TP:", conf_matrix_train[0])
+print("FP:", conf_matrix_train[1])
+print("TN:", conf_matrix_train[2])
+print("FN:", conf_matrix_train[3])
