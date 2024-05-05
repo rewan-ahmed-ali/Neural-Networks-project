@@ -134,19 +134,18 @@ def confusion_matrix_custom(y_true, y_pred):
 print("Confusion Matrix:")
 print(confusion_matrix_custom(Y, y_pred))
 
-# def preprocess_input_data(data, mean, std):
-#     data_array = np.array(data)
-#     data_array = data_array.reshape(1, -1)
-#     data_array = (data_array - mean) / std
-#     return data_array
+def preprocess_input_data(data, mean, std):
+    data = np.array(data)
+    data_std = (data - mean) / std
+    prediction = model.predict(data_std.reshape(1, -1))
+    return prediction[0]
+test_data = [52,1,0,125,212,0,1,168,0,1,2,2,3]
+processed_test_data = preprocess_input_data(test_data, mean, std)
+if processed_test_data >= 0.5:
+    print("The person is predicted to have heart disease.")
+else:
+    print("The person is predicted not to have heart disease.")
 
-# test_data = [54, 1, 0, 120, 188, 0, 1, 113, 0, 1.4, 1, 1, 3]
-# processed_test_data = preprocess_input_data(test_data, mean, std)
-# prediction = model.predict(processed_test_data)
-# if prediction[0] == 1:
-#     print("The person is predicted to have heart disease.")
-# else:
-#     print("The person is predicted not to have heart disease.")
 
 import matplotlib.pyplot as plt
 plt.plot(history.history['accuracy'], label='Training Accuracy')
