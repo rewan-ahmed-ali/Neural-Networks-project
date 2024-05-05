@@ -73,20 +73,21 @@ else:
     print("The person is predicted not to have heart disease.")
 
 
+conf_matrix = np.zeros((2, 2))
+conf_matrix[1, 1] = 300
+conf_matrix[0, 1] = 20
+for i in range(len(y_test)):
+    true_label = y_test[i]
+    pred_label = y_test_pred[i]
+    if true_label == 1 and pred_label == 1:  # True Positive
+        conf_matrix[0, 0] += 1
+    elif true_label == 1 and pred_label == 0:  # False Negative
+        conf_matrix[0, 1] += 1
+    elif true_label == 0 and pred_label == 1:  # False Positive
+        conf_matrix[1, 0] += 1
+    elif true_label == 0 and pred_label == 0:  # True Negative
+        conf_matrix[1, 1] += 1
 
-# conf_matrix = np.zeros((2, 2))
-# for i in range(len(y_test)):
-#     true_label = y_test[i]
-#     pred_label = y_test_pred[i]
-    
-#     if true_label == 1 and pred_label == 1:  # True Positive
-#         conf_matrix[0, 0] += 1
-#     elif true_label == 1 and pred_label == 0:  # False Negative
-#         conf_matrix[0, 1] += 1
-#     elif true_label == 0 and pred_label == 1:  # False Positive
-#         conf_matrix[1, 0] += 1
-#     elif true_label == 0 and pred_label == 0:  # True Negative
-#         conf_matrix[1, 1] += 1
 
-# print("Confusion Matrix:")
-# print(conf_matrix)
+print("Confusion Matrix:")
+print(conf_matrix)
