@@ -74,7 +74,7 @@ X_std = (X - X.mean()) / X.std()
 X_train, X_test, y_train, y_test = train_test_split(X_std, y, test_size=0.3, random_state=42)
 
 
-clf = Adaline(batch_size=None, learning_rate=0.02, n_iterations=100, random_state=1)
+clf = Adaline(batch_size=None, learning_rate=0.02, n_iterations=250, random_state=1)
 clf.fit(X_train.to_numpy(), y_train.to_numpy())
 
 
@@ -83,6 +83,14 @@ predictions = clf.predict(X_test.to_numpy())
 accuracy = np.mean(predictions == y_test)
 print("Accuracy:", accuracy)
 
+def confusion_matrix_custom(y_true, y_pred):
+    TP = np.sum(np.logical_and(y_true == 1, y_pred == 1))
+    TN = np.sum(np.logical_and(y_true == 0, y_pred == 0))
+    FP = np.sum(np.logical_and(y_true == 0, y_pred == 1))
+    FN = np.sum(np.logical_and(y_true == 1, y_pred == 0))   
+    return np.array([[TN, FP], [FN, TP]])
+print("Confusion Matrix:")
+print(confusion_matrix_custom(y_test, predictions))
 # Example of predicting whether a person has heart disease or not based on a single row of features
 test_data = [43,0,0,132,341,1,0,136,1,3,1,0,3]
 prediction = clf.predict_single(test_data)
@@ -90,3 +98,4 @@ if prediction == 1:
     print("The person is predicted to have heart disease.")
 else:
     print("The person is predicted not to have heart disease.")
+
