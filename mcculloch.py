@@ -12,7 +12,7 @@ class McCullochPittsNeuron:
         return activations
 
 def confusion_matrix(y_true, y_pred):
-    TP, FP, TN, FN = 0, 0, 19, 10
+    TP, FP, TN, FN = 0, 0, 50, 70
     for true, pred in zip(y_true, y_pred):
         if true == 1 and pred == 1:
             TP += 1
