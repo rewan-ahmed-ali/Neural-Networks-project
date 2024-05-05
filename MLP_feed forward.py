@@ -44,9 +44,9 @@ X = (X - mean) / std
  
 #Sequential = feed forward network
 model = Sequential([
-    Dense(256, activation='relu', input_shape=(X.shape[1],)), #first hidden layer
-    Dense(128, activation='relu'),  #second hidden layer
-    Dense(1, activation='sigmoid')  # Output layer with 1 neuron for binary classification
+    Dense(256, activation='relu', input_shape=(X.shape[1],)), 
+    Dense(128, activation='relu'),  
+    Dense(1, activation='sigmoid')  
 ])
 
 model.summary()
