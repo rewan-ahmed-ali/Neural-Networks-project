@@ -32,7 +32,7 @@ class AdaptiveLinearNeuron(object):
                 # Calculate the largest weight change
                 weight_change = max(weight_change, np.max(np.abs(self.rate * xi.dot(error))))  # Step 7
                 # cost_epoch += 0.5 * error ** 2  # Step 7
-                cost_epoch +=total_mean_square_error
+                cost_epoch += total_mean_square_error
 
             self.cost.append(cost_epoch)
             total_errors.append(cost_epoch) 
@@ -60,6 +60,12 @@ class AdaptiveLinearNeuron(object):
             output = self.activation(net_input)  # Step 4
             predictions.append(output)  # Step 5
         return predictions
+    
+    def predict_single(self, data, X):
+        data = np.array(data)
+        data_std = (data - X.mean(axis=0)) / X.std(axis=0)
+        prediction = self.predict(data_std.reshape(1, -1))
+        return prediction[0]
 
 heart_data = pd.read_csv('heart.csv')
 X = heart_data.drop(columns='target').values
@@ -81,7 +87,6 @@ test_accuracy = accuracy_score(y_test, predictions)
 print(f"Training Accuracy: {train_accuracy}")
 print(f"Test Accuracy: {test_accuracy}")
 
-
 print("Summary Results")
 print("Epoch\tTotal Mean Square Error")
 sorted_errors = sorted(errors, reverse=True)
@@ -89,8 +94,9 @@ for epoch, error in enumerate(sorted_errors, start=1):
     print(f"Epoch {epoch}\t{error:10.2f}")
 print(f"Error:\t {sorted_errors[-1]:.2f}")
 
-
-
-# print("Final weights:", adaline.weight)
-# print("Final bias:", adaline.bias)
-
+test_data = [52,1,0,125,212,0,1,168,0,1,2,2,3]
+prediction = adaline.predict_single(test_data, X)
+if prediction == 1:
+    print("The person is predicted to have heart disease.")
+else:
+    print("The person is predicted not to have heart disease.")
