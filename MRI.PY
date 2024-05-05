@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn.metrics import classification_report
 
 # Activation function (bipolar)
 def activation(x):
@@ -74,6 +75,11 @@ print("Confusion Matrix:")
 print(conf_matrix)
 print("Accuracy:", accuracy)
 
+# Classification report
+report = classification_report(y, predictions, target_names=["No heart disease", "heart disease"])
+print("Classification Report:")
+print(report)
+
 def preprocess_input_data(data, mean, std):
     data = np.array(data)
     data_std = (data - mean) / std
@@ -91,4 +97,3 @@ for i, prediction in enumerate(predictions):
         print("The person is predicted to have heart disease.")
     else:
         print(" The person is predicted not to have heart disease.")
-
