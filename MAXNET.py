@@ -45,30 +45,31 @@ class MaxNet:
                 correct += 1
         return correct / total
 
-# Read input data from heart.csv
-data = pd.read_csv("heart.csv")
 
-# Extract features and target
+data = pd.read_csv("heart.csv")
 X = data.iloc[:, :-1].values
 y = data.iloc[:, -1].values
 
-# Initialize and train the MaxNet
-model = MaxNet(data)
+def split_data(X, y, test_size=0.2):
+    n_samples = X.shape[0]
+    n_test = int(n_samples * test_size)
+    test_indices = np.random.choice(n_samples, n_test, replace=False)
+    train_indices = np.delete(np.arange(n_samples), test_indices)
+    return X[train_indices], X[test_indices], y[train_indices], y[test_indices]
+
+X_train, X_test, y_train, y_test = split_data(X, y)
+
+model = MaxNet(pd.DataFrame(X_train))
 model.train()
 
-# Test prediction on a single data point
 test_data = [[43, 0, 0, 132, 341, 1, 0, 136, 1, 3, 1, 0, 3]]
-targets = [1]  # Assuming the target for the test_data is 1
-
+targets = [1]  
+accuracy = model.calculate_accuracy(test_data, targets)
 prediction = model.predict_single(test_data[0])
 
-# Calculate accuracy
-accuracy = model.calculate_accuracy(test_data, targets)
-
-# Output the prediction and accuracy
 if prediction == 1:
     print("The person is predicted to have heart disease.")
 else:
     print("The person is predicted not to have heart disease.")
 
-print("Accuracy: ",accuracy )
+print("Accuracy: ", accuracy)
